@@ -17,6 +17,8 @@
 package com.example.android.codelabs.paging.model
 
 import com.google.gson.annotations.SerializedName
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * Immutable model class for a Github repo that holds all the information about a repository.
@@ -24,8 +26,9 @@ import com.google.gson.annotations.SerializedName
  * with the serialized name.
  * This class also defines the Room repos table, where the repo [id] is the primary key.
  */
+@Entity(tableName = "repos")
 data class Repo(
-    @field:SerializedName("id") val id: Long,
+    @PrimaryKey @field:SerializedName("id") val id: Long,
     @field:SerializedName("name") val name: String,
     @field:SerializedName("full_name") val fullName: String,
     @field:SerializedName("description") val description: String?,
