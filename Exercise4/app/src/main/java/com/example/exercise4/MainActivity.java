@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(new GraphicView(this));
 
-        GraphicView.mediaPlayer = MediaPlayer.create(GraphicView.ctext, R.raw.beautifulmistakes);
+        GraphicView.mediaPlayer = MediaPlayer.create(GraphicView.ctext, R.raw.g3oxemgigachadthemephonkhouseversion);
         GraphicView.mediaPlayer.start();
     }
 }
