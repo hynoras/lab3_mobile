@@ -12,14 +12,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Homework News Pagination App Flutter Version',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'News Pagination App (Flutter Version)'),
+      title: 'Exercise 3',
+      home: MyHomePage(title: 'Exercise 3'),
     );
   }
 }
@@ -37,12 +33,11 @@ class _MyHomePageState extends State<MyHomePage> {
   List<dynamic> articles = [];
   late FlutterTts flutterTts;
   late ScrollController _scrollController;
-  int _pageNumber = 1;
 
   Future<void> fetchNews() async {
     try {
       String apiUrl =
-          'https://newsapi.org/v2/everything?q=tesla&from=2024-03-25&sortBy=publishedAt&apiKey=65037d87299349b5bcf42e2611cbbbc4';
+          'https://newsapi.org/v2/everything?q=apple&from=2024-04-25&to=2024-04-25&sortBy=popularity&apiKey=0f303bb99c104d6893ffc040e899bf60';
 
       final response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {
@@ -50,7 +45,6 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {
           articles.addAll(jsonData['articles']);
         });
-        _pageNumber++;
       } else {
         throw Exception('Failed to load news: ${response.statusCode}');
       }
@@ -84,87 +78,63 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.blue,
         title: Text(
           widget.title,
           style: const TextStyle(
-              color: Colors.white, fontSize: 24),
+              color: Colors.white, fontSize: 40),
         ),
       ),
-      backgroundColor: Colors.black,
+      backgroundColor: const Color.fromARGB(255, 175, 174, 174),
       body: ListView.builder(
         controller: _scrollController,
         itemCount: articles.length,
         itemBuilder: (context, index) {
           final article = articles[index];
-          return Container(
-            margin: const EdgeInsets.only(top: 20, right: 20, left: 20, bottom: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Color.fromARGB(255, 95, 95, 95),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3), 
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.network(
+                article['urlToImage'] ?? '',
+                width: 500,
+                height: 300,
+              ),
+              Text(
+                article['title'] ?? '',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 30
                 ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 12),
-                Image.network(
-                  article['urlToImage'] ?? '',
-                  width: 200,
-                  height: 150,
+              ),
+              Text(
+                article['description'] ?? '',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  article['title'] ?? '',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold, fontSize: 21
-                  ),
+              ),
+              Text(
+                'Written by: ${article['author'] ?? ''}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  article['description'] ?? '',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 15
-                  ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                'Publish date: ${article['publishedAt'] ?? ''}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12
                 ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Text(
-                      'Author: ${article['author'] ?? ''}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Published at: ${article['publishedAt'] ?? ''}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-              ],
-            ),
+              ),
+              const Divider(height: 12, thickness: 2, color: Colors.white,),
+            ],
           );
         },
-),
-
-
+      ),
     );
   }
 }
